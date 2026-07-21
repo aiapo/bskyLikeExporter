@@ -1,0 +1,28 @@
+.container {
+    max-width: 700px;
+}
+
+.card {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.avatar {
+    overflow: hidden; width: 42px; height: 42px; border-radius: 21px;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  max-width: 350px;
+  background-color: black;
+  color: #ffffff;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}

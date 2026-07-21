@@ -1,0 +1,5 @@
+atproto==0.0.65
+dominate==2.9.1
+m3u8-To-MP4==0.1.11
+python-dotenv==1.2.2
+requests==2.34.2
