@@ -12,7 +12,7 @@ BSKY_VID_U = "https://video."+BSKY_APP+"/watch/"
 
 def getPost(did: str, rKey: str, client):
     try:
-        post = client.app.bsky.feed.post.get(did,rKey).value
+        post = client.get_post(rKey,did).value
 
         with div() as card:
             with blockquote():
@@ -27,11 +27,12 @@ def getPost(did: str, rKey: str, client):
 
         return card
     except exceptions.BadRequestError as e:
-        errorContent = e.response.content
-        if errorContent.error == "RecordNotFound":
-            return em("The post at "+rKey+" was deleted.")
-        elif errorContent.error == "InvalidRequest" and errorContent.message.startswith("Could not find repo:"):
-            return em("The post at "+rKey+" is inaccessible because the account is disabled/deleted/banned.")
+        if e.response is not None:
+            errorContent = e.response.content
+            if errorContent.error == "RecordNotFound":
+                return em("The post at "+rKey+" was deleted.")
+            elif errorContent.error == "InvalidRequest" and errorContent.message.startswith("Could not find repo:"):
+                return em("The post at "+rKey+" is inaccessible because the account is disabled/deleted/banned.")
         return em("The post at "+rKey+" couldn't be fetched. Trace: "+str(e))
     except Exception as e:
         print(e)
@@ -121,7 +122,9 @@ def getEmbedded(embedded,did,client):
             getExternal(did,embedded.external)
         elif embedded.__module__ == models.AppBskyEmbedRecord.__name__:
             getEmbeddedRecord(embedded.record.uri,client)
-                
+        elif embedded.__module__ == models.AppBskyEmbedGallery.__name__:
+            getImages(did,embedded.items)
+
     return card
 
 def main():
